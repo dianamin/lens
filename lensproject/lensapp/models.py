@@ -18,3 +18,13 @@ def create_user_profile(sender, **kwargs):
         user_profile = UserProfile.objects.create(user=kwargs['instance'])
 
 post_save.connect(create_user_profile, sender=User)
+
+class Photo(models.Model):
+    user = models.ForeignKey(User, related_name="uploaded_photos")
+    path = models.CharField(max_length=300)
+    upload_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User, related_name="liked_photos")
+
+    def __str__(self):
+        return self.path

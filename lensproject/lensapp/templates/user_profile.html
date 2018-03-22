@@ -4,4 +4,20 @@
 <h1> {{ user.username }} </h1>
 <p> {{ user.first_name }} {{ user.last_name }} </p>
 <p> {{ user.profile.birthdate }} </p>
+
+<h2> {{ user.uploaded_photos.count }} Photos </h2>
+
+
+{% for photo in user.uploaded_photos.all %}
+	<div style="display: inline-block;">
+		<img class="img-thumbnail"
+			 style="height: 150px;"
+			 src="{{ photo.path }}" />
+		<p style="text-align: center;">
+			<i class="material-icons md-14">favorite</i> 
+			{{ photo.likes.count }}
+		</p>
+    </div>
+{% endfor %}
+
 {% endblock %}

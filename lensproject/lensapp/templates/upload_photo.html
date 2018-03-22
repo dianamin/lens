@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1> <i class="material-icons md-20">add_circle_outline</i> Upload Photo </h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" value="Upload" class="btn btn-primary">
+        <i class="material-icons md-14">save</i>  Upload
+    </button>
+</form>
+{% endblock %}

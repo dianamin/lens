@@ -11,4 +11,7 @@ urlpatterns = [
     url(r'^user/stalk/(?P<username>\w+)/$', 
     	views.UserProfile.as_view(), 
     	name='user_profile'),
+    url(r'^upload_photo/$', 
+    	views.UploadPhotoView.as_view(), 
+    	name='upload_photo'),
 ]

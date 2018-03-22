@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django import forms
-from lensapp.models import UserProfile
+from lensapp.models import UserProfile, Photo
 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -30,3 +30,9 @@ class RegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
+class UploadPhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ('path',)

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.views.generic import TemplateView, DetailView, CreateView
 
-from lensapp.forms import RegistrationForm
-from lensapp.models import UserProfile, User
+from lensapp.forms import RegistrationForm, UploadPhotoForm
+from lensapp.models import UserProfile, User, Photo
 
 class HomeView(TemplateView):
     template_name = "index.html"
@@ -32,3 +33,20 @@ def register(request):
         form = RegistrationForm()
         return render(request, 'registration.html', {'form': form})
 
+
+class UploadPhotoView(LoginRequiredMixin, CreateView):
+    template_name = 'upload_photo.html'
+    form_class = UploadPhotoForm
+    model = Photo
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(UploadPhotoView, self).form_valid(form)
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse(
+            'user_profile', 
+            kwargs={
+                'username': self.request.user.username,
+            }
+        )
