@@ -42,12 +42,26 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+             <div class="navbar-nav">
                 {% if not request.user.is_authenticated %}
-                <a class="nav-item nav-link" href="/register">
-                    <i class="material-icons md-14">person</i> 
-                    Register
-                </a>
+                    <a class="nav-item nav-link" href="/login">
+                        <i class="material-icons md-14">exit_to_app</i> 
+                        Login
+                    </a>
+                    <a class="nav-item nav-link" href="/register">
+                        <i class="material-icons md-14">person</i> 
+                        Register
+                    </a>
+                {% else %}
+                    <a class="nav-item nav-link"
+                       style="vertical-align: top;">
+                       <i class="material-icons md-14">person</i>
+                        My Profile
+                    </a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}"
+                        style="vertical-align: top;">
+                        Logout
+                    </a>
                 {% endif %}
             </div>
         </div>

@@ -1,8 +1,11 @@
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import login, logout
 from lensapp import views
 
 urlpatterns = [
 	url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^login/$', login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', logout, {'template_name': 'logout.html'}, name='logout'),
 ]

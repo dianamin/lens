@@ -10,6 +10,8 @@ class HomeView(TemplateView):
     template_name = "index.html"
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method =='POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
