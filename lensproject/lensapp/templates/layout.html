@@ -53,7 +53,8 @@
                         Register
                     </a>
                 {% else %}
-                    <a class="nav-item nav-link"
+                <a class="nav-item nav-link"
+                   href="{% url 'user_profile' username=request.user.username %}"
                        style="vertical-align: top;">
                        <i class="material-icons md-14">person</i>
                         My Profile

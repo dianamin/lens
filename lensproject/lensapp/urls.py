@@ -8,4 +8,7 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^user/stalk/(?P<username>\w+)/$', 
+    	views.UserProfile.as_view(), 
+    	name='user_profile'),
 ]
