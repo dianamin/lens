@@ -14,4 +14,8 @@ urlpatterns = [
     url(r'^upload_photo/$', 
     	views.UploadPhotoView.as_view(), 
     	name='upload_photo'),
+	url(r'^ajax/follow_user/(?P<username>\w+)/$', 
+		views.follow_user,
+		name='follow_user'),
+
 ]

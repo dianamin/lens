@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     birthdate = models.DateField(null=True, blank=True)
+    following = models.ManyToManyField(User, related_name='followers')
 
     def __str__(self):
         return self.user.username
@@ -19,6 +20,7 @@ def create_user_profile(sender, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 
+
 class Photo(models.Model):
     user = models.ForeignKey(User, related_name="uploaded_photos")
     path = models.CharField(max_length=300)
@@ -28,3 +30,4 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.path
+

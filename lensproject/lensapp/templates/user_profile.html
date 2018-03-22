@@ -1,23 +1,59 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<h1> {{ user.username }} </h1>
-<p> {{ user.first_name }} {{ user.last_name }} </p>
-<p> {{ user.profile.birthdate }} </p>
+	<h1> {{ user.username }} </h1>
+	<p> {{ user.first_name }} {{ user.last_name }} </p>
+	<p> {{ user.profile.birthdate }} </p>
 
-<h2> {{ user.uploaded_photos.count }} Photos </h2>
+	<div>
+		{% if request.user.is_authenticated and request.user != user%}
+		    {% if request.user.profile in user.followers.all %}
+		        <button class="btn btn-primary" onclick="follow()">
+		            <i class="material-icons md-14">favorite_border</i> 
+		            Unfollow
+		        </button>
+		    {% else %}
+		        <button class="btn btn-primary" onclick="follow()">
+		            <i class="material-icons md-14">favorite</i> 
+		            Follow
+		        </button>
+		    {% endif %}
+		{% endif %}
+	</div>
 
 
-{% for photo in user.uploaded_photos.all %}
-	<div style="display: inline-block;">
-		<img class="img-thumbnail"
-			 style="height: 150px;"
-			 src="{{ photo.path }}" />
-		<p style="text-align: center;">
-			<i class="material-icons md-14">favorite</i> 
-			{{ photo.likes.count }}
-		</p>
-    </div>
-{% endfor %}
+	<h2> {{ user.followers.count }} Followers </h2>
+	<h2> {{ user.uploaded_photos.count }} Photos </h2>
 
+
+	{% for photo in user.uploaded_photos.all %}
+		<div style="display: inline-block;">
+			<img class="img-thumbnail"
+				 style="height: 150px;"
+				 src="{{ photo.path }}" />
+			<p style="text-align: center;">
+				<i class="material-icons md-14">favorite</i> 
+				{{ photo.likes.count }}
+			</p>
+	    </div>
+	{% endfor %}
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+	let follow = function() {
+	    let xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+	        if (this.readyState == 4 && this.status == 200) {
+	            window.location.reload();
+	        }
+	    };
+	    xhttp.open('GET', 
+	    			'{% url "follow_user" username=user.username %}', 
+	    			true);
+	    xhttp.send();
+	}
+</script>
 {% endblock %}

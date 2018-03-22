@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic import TemplateView, DetailView, CreateView
 
@@ -50,3 +51,16 @@ class UploadPhotoView(LoginRequiredMixin, CreateView):
                 'username': self.request.user.username,
             }
         )
+
+
+def follow_user(request, username):
+    if request.method == 'GET':
+        user = User.objects.get(username=username)
+        if user == request.user:
+            return JsonResponse({})
+        if not (request.user.profile in user.followers.all()):
+            user.followers.add(request.user.profile)
+        else:
+            user.followers.remove(request.user.profile)
+        user.save()
+        return JsonResponse({})
