@@ -52,15 +52,14 @@ class UploadPhotoView(LoginRequiredMixin, CreateView):
             }
         )
 
-
 def follow_user(request, username):
     if request.method == 'GET':
         user = User.objects.get(username=username)
         if user == request.user:
             return JsonResponse({})
-        if not (request.user.profile in user.followers.all()):
-            user.followers.add(request.user.profile)
+        if not (user in request.user.profile.following.all()):
+            request.user.profile.following.add(user)
         else:
-            user.followers.remove(request.user.profile)
-        user.save()
+            request.user.profile.following.remove(user)
+        request.user.profile.save()
         return JsonResponse({})
