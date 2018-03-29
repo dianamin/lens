@@ -1,12 +1,93 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+
+  form {
+    width: 545px;
+    margin: auto;
+    text-align: left;
+  }
+
+  p {
+    margin: 10px 0 0 0 !important;;
+  }
+
+  label {
+      margin: 0 0 0 2px !important;
+  }
+
+  .btn-space {
+    margin-top: 20px;
+  }
+
+  body {
+    background-color: #f5f5f5;
+  }
+
+  .logo {
+    margin-bottom: 30px;
+    color: #007bff;
+  }
+
+  .helptext {
+    display: block;
+    margin-top: 4px;
+    z-index: -1;
+  }
+
+  ul {
+    margin-top: 4px;      
+    z-index: -1;
+    margin-left: -24px !important;
+  }
+
+  .register-title {
+    text-align: center;
+  }
+
+  .btn-register {
+    margin-bottom: 50px;
+  }
+
+{% endblock %}
+
 {% block body %}
-<h1><i class="material-icons md-20">person</i> Register</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" value="Update" class="btn btn-primary">
-        <i class="material-icons md-20">person</i> Register
-    </button>
-</form>
+
+<div class="text-center">
+
+    <form method="post" class="form-signin centered">
+        <h3 class="h3 mb-3 font-weight-normal register-title">Register</h1>
+     
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-lg btn-primary btn-block btn-space btn-register" type="submit">Register</button>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    var helptext = document.querySelectorAll('.helptext');
+    for (var i = 0; i < helptext.length; i++) {
+        helptext[i].classList.add('alert','alert-secondary');
+    }
+
+    var ul = document.querySelectorAll('ul');
+    helptext[1].appendChild(ul[0]);
+
+    var inputs = document.querySelectorAll('input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].classList.add('form-control');
+    }
+
+    inputs[1].placeholder = "Username";
+    inputs[2].placeholder = "First name";
+    inputs[3].placeholder = "Last name";
+    inputs[4].placeholder = "Email";
+    inputs[5].placeholder = "Password";
+    inputs[6].placeholder = "Password confirmation";
+
+</script>
 {% endblock %}
