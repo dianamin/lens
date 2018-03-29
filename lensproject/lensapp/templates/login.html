@@ -1,13 +1,66 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+  form {
+    width: 330px;
+    margin: auto;
+  }
+
+  p {
+    margin: 0 !important;
+  }
+
+  .btn-space {
+    margin-top: 20px;
+  }
+
+  body {
+    background-color: #f5f5f5;
+  }
+
+  .centered {
+    position: fixed;
+    top: calc(50% - 30px);
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .logo {
+    margin-bottom: 30px;
+    color: #007bff;
+  }
+{% endblock %}
+
 {% block body %}
-<h1><i class="material-icons md-20">person</i> Login</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">
-        <i class="material-icons md-14">person</i> 
-        Login
-    </button>
-</form>
+<div class="text-center">
+
+  <form method="post" class="form-signin centered">
+    <h1 class="logo">LE<span style="color:black;">n</span>S</h1>
+    <h3 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-lg btn-primary btn-block btn-space" type="submit">Sign in</button>
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  
+    var labels = document.querySelectorAll('label');
+    for (var i = 0; i < labels.length; i++) {
+      labels[i].classList.add('sr-only');
+    }
+
+    var inputs = document.querySelectorAll('input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].classList.add('form-control');
+    }
+
+    inputs[1].placeholder = "Username";
+    inputs[2].placeholder = "Password";
+
+</script>
 {% endblock %}
