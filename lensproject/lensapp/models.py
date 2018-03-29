@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     birthdate = models.DateField(null=True, blank=True)
+    description = models.CharField(max_length=400, blank=True)
     following = models.ManyToManyField(User, related_name='followers')
 
     def __str__(self):

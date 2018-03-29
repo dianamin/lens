@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.views.generic import TemplateView, DetailView, CreateView
+from django.views.generic import TemplateView, DetailView, CreateView, UpdateView
 
-from lensapp.forms import RegistrationForm, UploadPhotoForm
+from lensapp.forms import RegistrationForm, UploadPhotoForm, EditUserProfileForm
 from lensapp.models import UserProfile, User, Photo
 
 class HomeView(TemplateView):
@@ -19,6 +19,23 @@ class UserProfile(DetailView):
     template_name = 'user_profile.html'
     def get_object(self):
         return get_object_or_404(User, username=self.kwargs['username'])
+
+
+class EditUserProfile(LoginRequiredMixin, UpdateView):
+    template_name = 'edit_user_profile.html'
+    form_class = EditUserProfileForm
+    model = UserProfile
+
+    def get_object(self):
+        return self.request.user.profile
+    
+    def get_success_url(self, *args, **kwargs):
+        return reverse(
+            'user_profile', 
+            kwargs={
+                'username': self.object.user.username
+            }
+        )
 
 
 def register(request):

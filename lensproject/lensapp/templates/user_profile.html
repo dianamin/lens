@@ -4,6 +4,7 @@
 	<h1> {{ user.username }} </h1>
 	<p> {{ user.first_name }} {{ user.last_name }} </p>
 	<p> {{ user.profile.birthdate }} </p>
+	<p> {{ user.profile.description }} </p>
 
 	<div>
 		{% if request.user.is_authenticated and request.user != user%}
@@ -20,6 +21,15 @@
 		    {% endif %}
 		{% endif %}
 	</div>
+
+	
+	{% if request.user.is_authenticated and request.user.username == user.username %}
+		<a href="{% url 'edit_user_profile' %}">
+			<button class="btn btn-primary">
+				Edit profile
+			</button>
+		</a>
+	{% endif %}
 
 
 	<h2> {{ user.followers.count }} Followers </h2>

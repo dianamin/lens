@@ -5,7 +5,6 @@ from lensapp.models import UserProfile, Photo
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -30,6 +29,12 @@ class RegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
+class EditUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('birthdate', 'description')
 
 
 class UploadPhotoForm(forms.ModelForm):

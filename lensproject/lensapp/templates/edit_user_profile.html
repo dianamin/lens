@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1><i class="material-icons md-20">edit</i>  Edit User Profile </h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        <i class="material-icons md-14">save</i> Save
+    </button>
+</form>
+{% endblock %}
