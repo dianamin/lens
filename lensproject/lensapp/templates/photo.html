@@ -1,0 +1,9 @@
+<div class="jumbotron">
+    <p> 
+    	Uploaded by
+    	<a href="{% url 'user_profile' username=photo.user.username %}">
+        	{{ photo.user.username }}
+        </a>
+    </p>
+    <img src="{{photo.path}}" />
+</div>

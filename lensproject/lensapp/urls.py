@@ -20,5 +20,5 @@ urlpatterns = [
 	url(r'^ajax/follow_user/(?P<username>\w+)/$', 
 		views.follow_user,
 		name='follow_user'),
-
+    url(r'^feed/$', views.Feed.as_view(), name='feed'),
 ]

@@ -4,13 +4,26 @@ from __future__ import unicode_literals
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.views.generic import TemplateView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, ListView
 
 from lensapp.forms import RegistrationForm, UploadPhotoForm, EditUserProfileForm
 from lensapp.models import UserProfile, User, Photo
 
 class HomeView(TemplateView):
     template_name = "index.html"
+
+
+class Feed(LoginRequiredMixin, ListView):
+    template_name = 'feed.html'
+    model = Photo
+    context_object_name = 'photos'
+    login_url = '/login/'
+
+    def get_queryset(self, *args, **kwargs):
+        following_users = self.request.user.profile.following.all()
+        return (Photo.objects.all().filter(user__in=following_users)
+                                   .order_by('-upload_date'))
+
 
 
 class UserProfile(DetailView):
@@ -25,6 +38,7 @@ class EditUserProfile(LoginRequiredMixin, UpdateView):
     template_name = 'edit_user_profile.html'
     form_class = EditUserProfileForm
     model = UserProfile
+    login_url = '/login/'
 
     def get_object(self):
         return self.request.user.profile
@@ -56,6 +70,7 @@ class UploadPhotoView(LoginRequiredMixin, CreateView):
     template_name = 'upload_photo.html'
     form_class = UploadPhotoForm
     model = Photo
+    login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

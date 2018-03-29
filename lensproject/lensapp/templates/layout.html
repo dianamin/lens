@@ -56,11 +56,15 @@
                         Register
                     </a>
                 {% else %}
-                <a class="nav-item nav-link"
-                   href="{% url 'user_profile' username=request.user.username %}"
+                    <a class="nav-item nav-link"
+                       href="{% url 'user_profile' username=request.user.username %}"
                        style="vertical-align: top;">
                        <i class="material-icons md-14">person</i>
                         My Profile
+                    </a>
+                    <a class="nav-item nav-link" href="{% url 'feed'%}">
+                        <i class="material-icons md-14">favorite_border</i>
+                        Feed
                     </a>
                     <a class="nav-item nav-link" href="/upload_photo">
                         <i class="material-icons md-14">add_circle_outline</i>

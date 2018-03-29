@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h1> Feed </h1>
+
+    {% if photos.count == 0 %}
+    <p> no photos pls follow people </p>
+    {% endif %}
+
+	{% for photo in photos %}       
+		{% include "photo.html" %}
+    {% endfor %}
+{% endblock %}
