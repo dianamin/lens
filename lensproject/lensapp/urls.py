@@ -21,4 +21,7 @@ urlpatterns = [
 		views.follow_user,
 		name='follow_user'),
     url(r'^feed/$', views.Feed.as_view(), name='feed'),
+    url(r'^photo/(?P<pk>[0-9]+)/$', 
+        views.PhotoDetail.as_view(),
+        name='photo_detail'),
 ]

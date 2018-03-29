@@ -22,7 +22,7 @@
 		{% endif %}
 	</div>
 
-	
+
 	{% if request.user.is_authenticated and request.user.username == user.username %}
 		<a href="{% url 'edit_user_profile' %}">
 			<button class="btn btn-primary">
@@ -44,6 +44,11 @@
 			<p style="text-align: center;">
 				<i class="material-icons md-14">favorite</i> 
 				{{ photo.likes.count }}
+			</p>
+			<p style="text-align: center;">
+				<a href="{% url 'photo_detail' pk=photo.pk %}">
+					<i class="material-icons md-14">visibility</i> View
+				</a>
 			</p>
 	    </div>
 	{% endfor %}

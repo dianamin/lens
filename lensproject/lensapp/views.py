@@ -25,6 +25,11 @@ class Feed(LoginRequiredMixin, ListView):
                                    .order_by('-upload_date'))
 
 
+class PhotoDetail(DetailView):
+    model = Photo
+    context_object_name = 'photo'
+    template_name = 'photo_detail.html'
+
 
 class UserProfile(DetailView):
     model = User
