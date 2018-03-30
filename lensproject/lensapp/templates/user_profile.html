@@ -1,10 +1,51 @@
 {% extends 'layout.html' %}
+{% load static %} 
+
+{% block styles %}
+
+	.profile-top-container {
+		position: relative;
+		top: -25px;
+	}
+
+	.username {
+		z-index: 2;
+		color: #bcbcbc;
+	}
+
+	.full-name {
+		position: absolute;
+		z-index: 2;
+		left: 25px;
+		bottom: 2px;
+		color: white;
+		font-size: 32px;
+	}
+
+	.cover-image {
+		position: relative;
+	}
+
+	.cover-image > img {
+		object-fit:cover;
+		height: 200px;
+		width: 100%;
+	}
+{% endblock %}
 
 {% block body %}
-	<h1> {{ user.username }} </h1>
-	<p> {{ user.first_name }} {{ user.last_name }} </p>
-	<p> {{ user.profile.birthdate }} </p>
-	<p> {{ user.profile.description }} </p>
+
+	<div class="profile-top-container">
+		
+		<p class="full-name"> {{ user.first_name }} {{ user.last_name }} <span class="username">({{ user.username }})</span> </p>
+		<div class="cover-image">
+			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>
+		</div>
+
+	</div>
+
+	<!-- <p> {{ user.profile.birthdate }} </p>
+	<p> {{ user.profile.description }} </p> -->
 
 	<div>
 		{% if request.user.is_authenticated and request.user != user%}
