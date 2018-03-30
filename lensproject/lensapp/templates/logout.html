@@ -2,18 +2,14 @@
 {% load static %} 
 
 {% block styles %}
-   .cover-image {
-		position: relative;
-	}
-
-	.cover-image > img {
-		object-fit:cover;
-		height: 550px;
-		width: 100%;
+   .background-image {
+		flex:1;
+		display:block;
 	}
 {% endblock %}
+
 {% block body %}
-     <div class="cover-image">
+     <div class="background-image">
 			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>
 	</div>
 {% endblock %}
