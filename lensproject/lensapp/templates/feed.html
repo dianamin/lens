@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="container">
 	<h1> Feed </h1>
 
     {% if photos.count == 0 %}
@@ -10,4 +11,5 @@
 	{% for photo in photos %}       
 		{% include "photo.html" %}
     {% endfor %}
+</div>
 {% endblock %}

@@ -1,5 +1,21 @@
 {% extends 'layout.html' %}
+{% load static %} 
+
+{% block styles %}
+    .cover-image {
+		position: relative;
+	}
+
+	.cover-image > img {
+		object-fit:cover;
+		height: 550px;
+		width: 100%;
+	}
+
+{% endblock %}
 
 {% block body %}
-	<h1> Hello world! </h1>
+	<div class="cover-image">
+			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>
+	</div>
 {% endblock %}
