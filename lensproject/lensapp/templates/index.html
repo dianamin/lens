@@ -3,14 +3,16 @@
 
 {% block styles %}
     .background-image {
-		flex:1;
-		display:block;
+		flex: 1;
+		display: block;
+	    background-image: url("./static/images/lens_default_cover2.jpg");
+	    background-size: cover;
+	    background-position: center;
 	}
 
 {% endblock %}
 
 {% block body %}
 	<div class="background-image">
-			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>
 	</div>
 {% endblock %}
