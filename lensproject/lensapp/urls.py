@@ -6,7 +6,13 @@ from lensapp import views
 urlpatterns = [
 	url(r'^$', views.Home.as_view(), name='home'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^login/$', login, {'template_name': 'login.html'}, name='login'),
+    url(r'^login/$',
+        login, 
+        {
+            'template_name': 'login.html',
+            'redirect_authenticated_user': True
+        },
+        name='login'),
     url(r'^logout/$', logout,
         {'template_name': 'logout.html', 'next_page': '/'},
         name='logout'),
@@ -32,4 +38,11 @@ urlpatterns = [
     url(r'^photo/(?P<pk>[0-9]+)/delete$', 
         views.DeletePhoto.as_view(),
         name='delete_photo'),
+    url(r'^account_activation_sent',
+        views.AccountActivationSent.as_view(),
+        name='account_activation_sent'),
+    url(r'^activate/(?P<uidb64>\w+)/(?P<token>[\w-]+)',
+        views.Activate.as_view(),
+        name='activate'),
+
 ]

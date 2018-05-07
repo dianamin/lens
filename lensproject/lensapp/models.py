@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     birthdate = models.DateField(null=True, blank=True)
     description = models.CharField(max_length=400, blank=True)
     following = models.ManyToManyField(User, related_name='followers')
+    activated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
