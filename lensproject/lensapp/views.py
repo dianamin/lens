@@ -114,3 +114,16 @@ def follow_user(request, username):
             request.user.profile.following.remove(user)
         request.user.profile.save()
         return JsonResponse({})
+
+
+def like_photo(request, photo_pk):
+    if request.method == 'GET':
+        photo = Photo.objects.get(pk=photo_pk)
+        if photo.user == request.user:
+            return JsonResponse({})
+        if not (request.user in photo.likes.all()):
+            photo.likes.add(request.user)
+        else:
+            photo.likes.remove(request.user)
+        photo.save()
+        return JsonResponse({})
