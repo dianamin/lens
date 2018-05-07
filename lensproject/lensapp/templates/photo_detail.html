@@ -4,5 +4,14 @@
 <div class="container">
 	<h1> Photo </h1>
 	{% include "photo.html" %}
+	
+    {% if request.user.is_authenticated and user == photo.user %}
+		<a href="{% url 'delete_photo' pk=photo.pk %}">
+			<button class="btn btn-danger">
+				<i class="material-icons md-14">delete_forever</i> 
+				Delete post
+			</button>
+		</a>
+	{% endif %}
 </div>
 {% endblock %}

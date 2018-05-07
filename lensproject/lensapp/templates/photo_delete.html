@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container">
+	<form method="post">{% csrf_token %}
+	    <p>Are you sure you want to delete this photo?</p>
+	    <input type="submit" value="Confirm" class="btn btn-danger" />
+	    
+		{% include "photo.html" %}
+	</form>
+</div>
+{% endblock %}
