@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
-from lensapp import views
+from lensapp import views 
 
 urlpatterns = [
 	url(r'^$', views.HomeView.as_view(), name='home'),
