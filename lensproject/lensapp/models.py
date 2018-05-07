@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+from lensapp.helpers import RandomFileName
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
@@ -24,12 +26,12 @@ post_save.connect(create_user_profile, sender=User)
 
 class Photo(models.Model):
     user = models.ForeignKey(User, related_name="uploaded_photos")
-    path = models.ImageField(upload_to = 'photos/user-photos/',
-                              default = 'photos/user-photos/none.png')
+    path = models.ImageField(upload_to=RandomFileName('photos/user-photos/'))
     upload_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name="liked_photos")
-
+    
     def __str__(self):
         return self.path.url
+
 
