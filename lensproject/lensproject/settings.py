@@ -132,4 +132,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-JASMINE_TEST_DIRECTORY = os.path.join(BASE_DIR, 'static/js') 
+STATIC_ROOT = BASE_DIR + '/lensapp/static/'
+JASMINE_TEST_DIRECTORY = STATIC_ROOT
