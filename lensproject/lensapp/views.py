@@ -5,7 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, ListView, DeleteView
+from django.views.generic import (TemplateView, DetailView, CreateView,
+                                    UpdateView, ListView, DeleteView)
 
 from lensapp.forms import RegistrationForm, UploadPhotoForm, EditUserProfileForm
 from lensapp.models import UserProfile, User, Photo
@@ -144,8 +145,12 @@ class DeletePhoto(DeleteView):
         )
 
 
-class FollowUserAjax(TemplateView):
+class FollowUserAjax(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
+        if 'username' not in kwargs:
+            return JsonResponse({'error': 'No user given.'})
+        if not User.objects.filter(username=kwargs['username']).exists():
+            return JsonResponse({'error': 'User does not exist.'})
         user = User.objects.get(username=kwargs['username'])
         if user == self.request.user:
             return JsonResponse({})
@@ -157,11 +162,15 @@ class FollowUserAjax(TemplateView):
         return JsonResponse({})
 
 
-class LikePhotoAjax(TemplateView):
+class LikePhotoAjax(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
+        if 'photo_pk' not in kwargs:
+            return JsonResponse({'error': 'No photo given.'})
+        if not Photo.objects.filter(pk=kwargs['photo_pk']).exists():
+            return JsonResponse({'error': 'Photo does not exist.'})
         photo = Photo.objects.get(pk=kwargs['photo_pk'])
         if photo.user == self.request.user:
-            return JsonResponse({})
+            return JsonResponse({'error': 'Don\'t like your own photo.'})
         if not (self.request.user in photo.likes.all()):
             photo.likes.add(self.request.user)
         else:

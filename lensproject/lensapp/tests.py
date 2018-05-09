@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import io
+import json
 import tempfile
 
 from django.core.files import File
@@ -72,7 +73,6 @@ class ImageCreator():
 
 
 class UploadPhotoTest(TestCase):
-
     def setUp(self):
         self.image = ImageCreator.create_image()
         self.photo_data = {
@@ -122,7 +122,7 @@ class FollowTest(TestCase):
 
     def test_follow(self):
         # follow
-        self.client.get(
+        response = self.client.get(
             '/ajax/follow_user/' + self.followed_credentials['username'] +'/', 
             follow=True
         )
@@ -132,14 +132,26 @@ class FollowTest(TestCase):
         follower = User.objects.get(
             username=self.follower_credentials['username']
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('error', json.loads(response.content))
         self.assertTrue(followed in list(follower.profile.following.all()))
         self.assertTrue(follower.profile in list(followed.followers.all()))
 
+        # follow user that does not exist
+        response = self.client.get(
+            '/ajax/follow_user/no_user/', 
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('error', json.loads(response.content))
+
         # unfollow
-        self.client.get(
+        response = self.client.get(
             '/ajax/follow_user/' + self.followed_credentials['username'] + '/', 
             follow=True
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('error', json.loads(response.content))
         self.assertFalse(followed in list(follower.profile.following.all()))
         self.assertFalse(follower.profile in list(followed.followers.all()))
 
@@ -197,19 +209,30 @@ class LikeTest(TestCase):
 
     def test_like(self):
         # like
-        self.client.get(
+        response = self.client.get(
             '/ajax/like_photo/' + str(self.photo.pk) +'/', 
             follow=True
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('error', json.loads(response.content))
         self.assertEqual(self.photo.likes.count(), 1)
         self.assertIn(self.liker, self.photo.likes.all())
         self.assertIn(self.photo, self.liker.liked_photos.all())
 
+        # like photo that does not exist
+        response = self.client.get(
+            '/ajax/like_photo/2/', 
+            follow=True
+        )
+        self.assertIn('error', json.loads(response.content))
+
         # unlike
-        self.client.get(
+        response = self.client.get(
             '/ajax/like_photo/' + str(self.photo.pk) +'/', 
             follow=True
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('error', json.loads(response.content))
         self.assertEqual(self.photo.likes.count(), 0)
         self.assertNotIn(self.liker, self.photo.likes.all())
         self.assertNotIn(self.photo, self.liker.liked_photos.all())
