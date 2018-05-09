@@ -10,8 +10,8 @@ from lensapp.models import User, Photo
 
 class Command(BaseCommand):
     def _read_images(self):
-        path = settings.MEDIA_ROOT + '/photos/initial-photos/'
-        return ['media/photos/initial-photos/' + f
+        path = settings.SEED_IMAGES_ROOT
+        return ['seed_images/' + f
                 for f in listdir(path) if isfile(join(path, f))]
     
     def _get_file(self, filePath):
@@ -34,4 +34,5 @@ class Command(BaseCommand):
         paths = self._read_images()
         for path in paths:
             photo = Photo(path=self._get_file(path), user=user)
+            print(photo.path)
             photo.save()

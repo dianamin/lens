@@ -127,6 +127,9 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+SEED_IMAGES_ROOT = os.path.join(BASE_DIR, 'seed_images')
+
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
