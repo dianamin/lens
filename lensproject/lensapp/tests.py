@@ -5,6 +5,8 @@ import io
 import json
 import tempfile
 
+from django.conf import settings
+
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
@@ -14,6 +16,8 @@ from lensapp.forms import RegistrationForm, UploadPhotoForm
 from lensapp.models import UserProfile, Photo
 
 import lensapp.views
+
+from captcha.models import CaptchaStore
 
 from PIL import Image
 
@@ -25,14 +29,25 @@ class RegistrationTest(TestCase):
             'last_name': 'test',
             'email': 'test@test.com',
             'password1': 'secret_discret',
-            'password2': 'secret_discret'
+            'password2': 'secret_discret',
         }
 
     def test_register(self):
-        form = RegistrationForm(data=self.user_data)
-        self.assertTrue(form.is_valid())
-        form.save()
+        response = self.client.post('/register/', self.user_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(
+            User.objects.filter(username=self.user_data['username']).exists())
 
+        captcha_count = CaptchaStore.objects.count()
+        
+        self.failUnlessEqual(captcha_count, 1)
+        captcha = CaptchaStore.objects.all()[0]
+        self.user_data['captcha_0'] = captcha.hashkey
+        self.user_data['captcha_1'] = captcha.response
+
+        response = self.client.post('/register/', self.user_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         self.assertTrue(
             User.objects.filter(username=self.user_data['username']).exists())
         user = User.objects.get(username=self.user_data['username'])

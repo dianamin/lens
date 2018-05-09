@@ -1,12 +1,14 @@
 from __future__ import unicode_literals
 from django import forms
 from lensapp.models import UserProfile, Photo
+from captcha.fields import CaptchaField
 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    captcha = CaptchaField()
 
     class Meta:
         model = User
