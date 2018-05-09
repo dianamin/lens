@@ -138,5 +138,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATIC_ROOT = BASE_DIR + '/lensapp/static/'
 JASMINE_TEST_DIRECTORY = STATIC_ROOT
-
-CAPTCHA_TEST_MODE = True
