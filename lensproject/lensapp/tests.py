@@ -176,3 +176,41 @@ class FeedTest(TestCase):
         self.assertEqual(photos[0].user, self.followed)
 
 
+class LikeTest(TestCase):
+    def setUp(self):
+        self.liker_credentials = {
+            'username': 'liker',
+            'password': 'secret'}
+        self.uploader_credentials = {
+            'username': 'uploader',
+            'password': 'secret'}
+        self.liker = User.objects.create_user(**self.liker_credentials)
+        self.uploader = User.objects.create_user(**self.uploader_credentials)
+
+        self.image = ImageCreator.create_image()
+        self.photo = Photo(path=self.image, user=self.uploader)
+        self.photo.save()
+        self.client.post('/login/', self.liker_credentials)
+
+    def tearDown(self):
+        self.image.close()
+
+    def test_like(self):
+        # like
+        self.client.get(
+            '/ajax/like_photo/' + str(self.photo.pk) +'/', 
+            follow=True
+        )
+        self.assertEqual(self.photo.likes.count(), 1)
+        self.assertIn(self.liker, self.photo.likes.all())
+        self.assertIn(self.photo, self.liker.liked_photos.all())
+
+        # unlike
+        self.client.get(
+            '/ajax/like_photo/' + str(self.photo.pk) +'/', 
+            follow=True
+        )
+        self.assertEqual(self.photo.likes.count(), 0)
+        self.assertNotIn(self.liker, self.photo.likes.all())
+        self.assertNotIn(self.photo, self.liker.liked_photos.all())
+
