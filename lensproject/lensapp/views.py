@@ -141,27 +141,27 @@ class DeletePhoto(DeleteView):
         )
 
 
-def follow_user(request, username):
-    if request.method == 'GET':
-        user = User.objects.get(username=username)
-        if user == request.user:
+class FollowUserAjax(TemplateView):
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(username=kwargs['username'])
+        if user == self.request.user:
             return JsonResponse({})
-        if not (user in request.user.profile.following.all()):
-            request.user.profile.following.add(user)
+        if not (user in self.request.user.profile.following.all()):
+            self.request.user.profile.following.add(user)
         else:
-            request.user.profile.following.remove(user)
-        request.user.profile.save()
+            self.request.user.profile.following.remove(user)
+        self.request.user.profile.save()
         return JsonResponse({})
 
 
-def like_photo(request, photo_pk):
-    if request.method == 'GET':
-        photo = Photo.objects.get(pk=photo_pk)
-        if photo.user == request.user:
+class LikePhotoAjax(TemplateView):
+    def get(self, request, *args, **kwargs):
+        photo = Photo.objects.get(pk=kwargs['photo_pk'])
+        if photo.user == self.request.user:
             return JsonResponse({})
-        if not (request.user in photo.likes.all()):
-            photo.likes.add(request.user)
+        if not (self.request.user in photo.likes.all()):
+            photo.likes.add(self.request.user)
         else:
-            photo.likes.remove(request.user)
+            photo.likes.remove(self.request.user)
         photo.save()
         return JsonResponse({})
