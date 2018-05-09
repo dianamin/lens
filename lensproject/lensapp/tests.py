@@ -284,11 +284,28 @@ class FindUsersTest(TestCase):
         self.assertEqual(response.status_code, 200)
         responseDict = json.loads(response.content)
         self.assertIn('users', responseDict)
+        self.assertEqual(len(responseDict['users']), 5)
         for user in self.users:
             self.assertIn({
                 'username': user.username,
                 'first_name': user.first_name,
                 'last_name': user.last_name
             }, responseDict['users'])
+
+
+    def test_unique_found(self):
+        response = self.client.get(
+            '/ajax/find_user/' + 'user2' +'/', 
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        responseDict = json.loads(response.content)
+        self.assertIn('users', responseDict)
+        self.assertEqual(len(responseDict['users']), 1)
+        self.assertIn({
+            'username': 'user2',
+            'first_name': 'test',
+            'last_name': 'test'
+        }, responseDict['users'])
 
 
