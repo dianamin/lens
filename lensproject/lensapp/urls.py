@@ -5,7 +5,7 @@ from lensapp import views
 
 urlpatterns = [
 	url(r'^$', views.Home.as_view(), name='home'),
-    url(r'^register/$', views.register, name='register'),
+    url(r'^register/$', views.Register.as_view(), name='register'),
     url(r'^login/$',
         login, 
         {

@@ -79,15 +79,15 @@ class EditUserProfile(LoginRequiredMixin, UpdateView):
         )
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    if request.method =='POST':
-        form = RegistrationForm(request.POST)
+class Register(TemplateView):
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('/')
+        form = RegistrationForm(self.request.POST)
         if form.is_valid():
             user = form.save()
 
-            site = get_current_site(request)
+            site = get_current_site(self.request)
             subject = 'Lens Registration'
             message = render_to_string('account_activation_email.html', {
                 'domain': site.domain,
@@ -97,10 +97,13 @@ def register(request):
             })
             user.email_user(subject, message)
             return redirect('account_activation_sent')
-        return render(request, 'registration.html', {'form': form})       
-    else:
+        return render(self.request, 'registration.html', {'form': form})
+
+    def get(self, request, *args, **kwargs):   
+        if self.request.user.is_authenticated:
+            return redirect('/')
         form = RegistrationForm()
-        return render(request, 'registration.html', {'form': form})
+        return render(self.request, 'registration.html', {'form': form})
 
 
 class PhotoDetail(DetailView):
