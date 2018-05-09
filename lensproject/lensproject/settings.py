@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+import sys
 import os
 import django_jasmine
 
@@ -138,3 +139,31 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATIC_ROOT = BASE_DIR + '/lensapp/static/'
 JASMINE_TEST_DIRECTORY = STATIC_ROOT
+
+
+# Ml solution files
+
+MODEL_PATH = BASE_DIR + '/lensapp/ml/model/resnet.md5'
+
+INDEX_VECTORS_SIZE = 1024
+INDEX_PATH = BASE_DIR + '/lensapp/ml/model/index.pickle'
+
+print(sys.argv)
+if sys.argv[1] in ['runserver', 'populate_db']:
+    import keras.models
+    import keras.backend as K
+
+    def load_model(path):
+        print("Loading Model")
+        model = keras.models.load_model(path)
+        return K.function([model.layers[0].input],
+            [model.layers[3].output])
+
+
+    EXTRACT_IMAGE_FEATURES = load_model(MODEL_PATH)
+
+if sys.argv[1] == 'runserver':
+    from annoy import AnnoyIndex
+    print("Loading Index")
+
+    INDEX = AnnoyIndex(INDEX_VECTORS_SIZE).load(INDEX_PATH)
