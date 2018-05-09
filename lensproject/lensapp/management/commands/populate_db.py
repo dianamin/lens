@@ -30,9 +30,9 @@ class Command(BaseCommand):
             user = User.objects.get(username=user_data['username'])
 
         if user.uploaded_photos.all().count() != 0:
-            return
+            user.uploaded_photos.all().delete()
+
         paths = self._read_images()
         for path in paths:
             photo = Photo(path=self._get_file(path), user=user)
-            print(photo.path)
             photo.save()
