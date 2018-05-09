@@ -15,6 +15,7 @@ class RandomFileName(object):
         extension = os.path.splitext(filename)[1]
         return self.path % (uuid.uuid4(), extension)
 
+
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
         return (
