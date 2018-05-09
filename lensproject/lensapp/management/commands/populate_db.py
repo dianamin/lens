@@ -66,7 +66,9 @@ class Command(BaseCommand):
     def get_user_data(self, user_id):
         return {
             'username': 'testuser%s' % user_id,
-            'email': 'test%s@test.com' % user_id
+            'email': 'test%s@test.com' % user_id,
+            'first_name': 'Test %s' % user_id,
+            'last_name': 'User'
         }
 
     def handle(self, *args, **options):
