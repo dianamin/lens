@@ -31,6 +31,9 @@ urlpatterns = [
 	url(r'^ajax/follow_user/(?P<username>\w+)/$', 
 		views.FollowUserAjax.as_view(),
         name='follow_user'),
+    url(r'^ajax/find_user/(?P<prefix>\w+)/$', 
+        views.FindUserAjax.as_view(),
+        name='follow_user'),
     url(r'^ajax/like_photo/(?P<photo_pk>\w+)/$', 
         views.LikePhotoAjax.as_view(),
 		name='like_photo'),
@@ -52,7 +55,6 @@ urlpatterns = [
         {
             'template_name': 'password_reset_form.html',
             'email_template_name': 'password_reset_email.html',
-            
         },
         name='password_reset'),
     url(r'^password_reset/done/$',
