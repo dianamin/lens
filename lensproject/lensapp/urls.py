@@ -51,6 +51,8 @@ urlpatterns = [
         auth_views.password_reset,
         {
             'template_name': 'password_reset_form.html',
+            'email_template_name': 'password_reset_email.html',
+            
         },
         name='password_reset'),
     url(r'^password_reset/done/$',
