@@ -177,3 +177,20 @@ class LikePhotoAjax(LoginRequiredMixin, TemplateView):
             photo.likes.remove(self.request.user)
         photo.save()
         return JsonResponse({})
+
+
+class FindUserAjax(TemplateView):
+    def get(self, request, *args, **kwargs):
+        if 'prefix' not in kwargs:
+            return JsonResponse({'users': []})
+        users = [
+            {
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+            }
+            for user in User.objects.filter(
+                username__startswith=kwargs['prefix'])[0:10]
+        ]
+        return JsonResponse({'users': users})
+

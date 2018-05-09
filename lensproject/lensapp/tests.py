@@ -252,3 +252,43 @@ class LikeTest(TestCase):
         self.assertNotIn(self.liker, self.photo.likes.all())
         self.assertNotIn(self.photo, self.liker.liked_photos.all())
 
+class FindUsersTest(TestCase):
+    def setUp(self):
+        self.users = []
+        for i in range(0, 5):
+            user_credentials = {
+                'username': 'user' + str(i),
+                'password': 'secret',
+                'first_name': 'test',
+                'last_name': 'test',
+            }
+            self.users = self.users + [
+                User.objects.create_user(**user_credentials)
+            ]
+
+    def test_not_found(self):
+        response = self.client.get(
+            '/ajax/find_user/' + 'no_user' +'/', 
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        responseDict = json.loads(response.content)
+        self.assertIn('users', responseDict)
+        self.assertEqual(len(responseDict['users']), 0)
+
+    def test_found(self):
+        response = self.client.get(
+            '/ajax/find_user/' + 'user' +'/', 
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        responseDict = json.loads(response.content)
+        self.assertIn('users', responseDict)
+        for user in self.users:
+            self.assertIn({
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+            }, responseDict['users'])
+
+
