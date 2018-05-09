@@ -102,7 +102,6 @@ ENV/
 
 # Database
 *.sqlite3
-migrations/
 db.sqlite3
 
 media/
