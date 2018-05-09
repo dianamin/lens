@@ -1,19 +1,22 @@
 from django.conf.urls import url
 from django.contrib import admin
-from django.contrib.auth.views import login, logout
+from django.contrib.auth import views as auth_views
+
+
 from lensapp import views 
 
 urlpatterns = [
 	url(r'^$', views.Home.as_view(), name='home'),
     url(r'^register/$', views.Register.as_view(), name='register'),
     url(r'^login/$',
-        login, 
+        auth_views.login, 
         {
             'template_name': 'login.html',
             'redirect_authenticated_user': True
         },
         name='login'),
-    url(r'^logout/$', logout,
+    url(r'^logout/$',
+        auth_views.logout,
         {'template_name': 'logout.html', 'next_page': '/'},
         name='logout'),
     url(r'^user/stalk/(?P<username>\w+)/$', 
@@ -44,5 +47,28 @@ urlpatterns = [
     url(r'^activate/(?P<uidb64>\w+)/(?P<token>[\w-]+)',
         views.Activate.as_view(),
         name='activate'),
-
+    url(r'^password_reset/$',
+        auth_views.password_reset,
+        {
+            'template_name': 'password_reset_form.html',
+        },
+        name='password_reset'),
+    url(r'^password_reset/done/$',
+        auth_views.password_reset_done,
+        {
+            'template_name': 'password_reset_done.html',
+        },
+        name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.password_reset_confirm,
+        {
+            'template_name': 'password_reset_confirm.html',
+        },
+        name='password_reset_confirm'),
+    url(r'^reset/done/$',
+        auth_views.password_reset_complete,
+        {
+            'template_name': 'password_reset_complete.html',
+        },
+        name='password_reset_complete'),
 ]
