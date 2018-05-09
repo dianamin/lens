@@ -53,12 +53,6 @@ class Feed(LoginRequiredMixin, ListView):
                                    .order_by('-upload_date'))
 
 
-class PhotoDetail(DetailView):
-    model = Photo
-    context_object_name = 'photo'
-    template_name = 'photo_detail.html'
-
-
 class UserProfile(DetailView):
     model = User
     context_object_name = 'user'
@@ -91,7 +85,6 @@ def register(request):
     if request.method =='POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-
             user = form.save()
 
             site = get_current_site(request)
@@ -108,6 +101,12 @@ def register(request):
     else:
         form = RegistrationForm()
         return render(request, 'registration.html', {'form': form})
+
+
+class PhotoDetail(DetailView):
+    model = Photo
+    context_object_name = 'photo'
+    template_name = 'photo_detail.html'
 
 
 class UploadPhoto(LoginRequiredMixin, CreateView):

@@ -7,9 +7,12 @@ import tempfile
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
+from django.shortcuts import reverse
 from django.test import TestCase
 from lensapp.forms import RegistrationForm, UploadPhotoForm
 from lensapp.models import UserProfile, Photo
+
+import lensapp.views
 
 from PIL import Image
 
@@ -31,10 +34,13 @@ class RegistrationTest(TestCase):
 
         self.assertTrue(
             User.objects.filter(username=self.user_data['username']).exists())
-        user = User.objects.filter(username=self.user_data['username'])
+        user = User.objects.get(username=self.user_data['username'])
         self.assertTrue(UserProfile.objects.filter(user=user).exists())
+        self.assertEqual(user.uploaded_photos.count(), 0)
+        self.assertEqual(user.profile.following.count(), 0)
+        self.assertEqual(user.followers.count(), 0)
 
-            
+   
 class LoginTest(TestCase):
     def setUp(self):
         self.credentials = {
@@ -43,48 +49,63 @@ class LoginTest(TestCase):
         User.objects.create_user(**self.credentials)
 
     def test_login(self):
-        #login
+        # login
         response = self.client.post('/login/', self.credentials, follow=True)
         self.assertIn('_auth_user_id', self.client.session)
 
-        #logout
+        # logout
         response = self.client.get('/logout/')
         self.assertNotIn('_auth_user_id', self.client.session)
 
 
-class UploadPhotoTest(TestCase):
-    def _create_image(self):
+class ImageCreator():
+    @staticmethod
+    def create_image():
         from PIL import Image
  
         with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
             image = Image.new('RGB', (200, 200), 'white')
             image.save(f, 'PNG')
  
-        return open(f.name, mode='rb')
+        image = open(f.name, mode='rb')
+        return SimpleUploadedFile(image.name, image.read())
+
+
+class UploadPhotoTest(TestCase):
 
     def setUp(self):
-        self.image = self._create_image()
+        self.image = ImageCreator.create_image()
         self.photo_data = {
-            'path': SimpleUploadedFile(self.image.name, self.image.read())
+            'path': self.image
         }
         self.credentials = {
             'username': 'testuser',
             'password': 'secret'}
         User.objects.create_user(**self.credentials)
         self.client.post('/login/', self.credentials)
+        self.user = User.objects.get(username=self.credentials['username'])
  
     def tearDown(self):
         self.image.close()
 
     def test_upload(self):
+        # upload
         form = UploadPhotoForm(files=self.photo_data)
         self.assertTrue(form.is_valid())
         response = self.client.post('/upload_photo/',
                                     self.photo_data,
                                     follow=True)
-        self.assertEqual(Photo.objects.count(), 1)
-        self.assertEqual(Photo.objects.get(pk=1).user.username,
-                         self.credentials['username'])
+        self.assertTrue(
+            Photo.objects.filter(user=self.user).exists())
+
+        photo = Photo.objects.get(pk=1)
+        self.assertEqual(photo.user, self.user)
+        self.assertEqual(photo.likes.count(), 0)
+
+        # delete
+        self.client.post('/photo/1/delete')
+        self.assertFalse(
+            Photo.objects.filter(user=self.user).exists())
 
 
 class FollowTest(TestCase):
@@ -100,7 +121,7 @@ class FollowTest(TestCase):
         self.client.post('/login/', self.follower_credentials, follow=True)
 
     def test_follow(self):
-        #follow
+        # follow
         self.client.get(
             '/ajax/follow_user/' + self.followed_credentials['username'] +'/', 
             follow=True
@@ -114,11 +135,44 @@ class FollowTest(TestCase):
         self.assertTrue(followed in list(follower.profile.following.all()))
         self.assertTrue(follower.profile in list(followed.followers.all()))
 
-        #unfollow
+        # unfollow
         self.client.get(
-            '/ajax/follow_user/' + self.followed_credentials['username'] +'/', 
+            '/ajax/follow_user/' + self.followed_credentials['username'] + '/', 
             follow=True
         )
         self.assertFalse(followed in list(follower.profile.following.all()))
         self.assertFalse(follower.profile in list(followed.followers.all()))
+
+
+class FeedTest(TestCase):
+    def setUp(self):
+        self.follower_credentials = {
+            'username': 'follower',
+            'password': 'secret'}
+        self.followed_credentials = {
+            'username': 'followed',
+            'password': 'secret'}
+        self.other_credentials = {
+            'username': 'other',
+            'password': 'secret'}
+        self.follower = User.objects.create_user(**self.follower_credentials)
+        self.followed = User.objects.create_user(**self.followed_credentials)
+        self.other = User.objects.create_user(**self.other_credentials)
+
+        self.image = ImageCreator.create_image()
+        self.follower.profile.following.add(self.followed)
+        Photo(path=self.image, user=self.followed).save()
+        Photo(path=self.image, user=self.other).save()
+        self.client.post('/login/', self.follower_credentials)
+
+    def tearDown(self):
+        self.image.close()
+
+    def test_feed_view(self):
+        response = self.client.get('/feed/')
+        self.assertEqual(response.status_code, 200)
+        photos = response.context['photos']
+        self.assertEqual(photos.count(), 1)
+        self.assertEqual(photos[0].user, self.followed)
+
 
