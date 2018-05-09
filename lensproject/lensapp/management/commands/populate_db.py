@@ -13,7 +13,10 @@ from annoy import AnnoyIndex
 import numpy as np
 from tqdm import tqdm
 
+np.random.seed(7)
+
 class Command(BaseCommand):
+
     def _read_images(self):
         path = settings.SEED_IMAGES_ROOT
         return ['seed_images/' + f
@@ -60,24 +63,37 @@ class Command(BaseCommand):
         print('Saving Index')
         index.save(settings.INDEX_PATH)
 
-
-    def handle(self, *args, **options):
-        user_data = {
-            'username': 'testuser',
-            'email': 'test@test.com'
+    def get_user_data(self, user_id):
+        return {
+            'username': 'testuser%s' % user_id,
+            'email': 'test%s@test.com' % user_id
         }
 
-        if not User.objects.filter(username=user_data['username']).exists():
-            user = User.objects.create_user(**user_data)
-        else:
-            user = User.objects.get(username=user_data['username'])
+    def handle(self, *args, **options):
+        NUM_USERS = 15
 
-        if user.uploaded_photos.all().count() != 0:
-            user.uploaded_photos.all().delete()
+        print('Creat or reset users')
+        users = []
+        for i in range(NUM_USERS):
+            user_data = self.get_user_data(i)
+            if not User.objects.filter(username=user_data['username'])\
+                    .exists():
+                user = User.objects.create_user(**user_data)
+            else:
+                user = User.objects.get(username=user_data['username'])
 
+            if user.uploaded_photos.all().count() != 0:
+                user.uploaded_photos.all().delete()
+
+            user.set_password('testuser')
+            user.save()
+            users.append(user)
+
+        print('Uploading images')
         paths = self._read_images()
-        for path in paths:
-            photo = Photo(path=self._get_file(path), user=user)
+        np.random.shuffle(paths)
+        for i, path in enumerate(paths):
+            photo = Photo(path=self._get_file(path), user=users[i%NUM_USERS])
             photo.save()
 
         self.create_index_file()
