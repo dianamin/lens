@@ -174,3 +174,5 @@ if sys.argv[1] == 'runserver':
 
     INDEX = AnnoyIndex(INDEX_VECTORS_SIZE)
     INDEX.load(INDEX_PATH)
+
+SILKY_PYTHON_PROFILER = True
