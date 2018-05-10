@@ -1,24 +1,97 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+
+  .lens-col {
+    padding: 10px 5px !important;
+  }
+
+  .photo-holder {
+    padding: 5px 0px 5px 5px !important;
+  }
+
+  .photo-btn-left {
+    width:100%;
+  }
+
+  .photo-btn-right {
+    width:100%;
+  }
+
+  .lens-col br {
+    display: none;
+  }
+
+  .likes-number {
+    display: block;
+    position: relative;
+    top: 12px;
+    text-align: center;
+}
+
+{% endblock %}
+
 {% block body %}
 <div class="container">
 	<h1> Photo </h1>
-	{% include "photo.html" %}
 	
-    {% for photo in photo.get_similar %}
-    	<img src="{{photo.path.url}}" style="height: 100px;" />
-    {% endfor %}
-	{{photo.likes.count}} likes <br />
-
-
-    {% if request.user.is_authenticated and user == photo.user %}
+	<div class="col-md-6">
+	    {% include "photo.html" %}
+	</div>
+	
+	{% if request.user.is_authenticated and user == photo.user %}
 		<a href="{% url 'delete_photo' pk=photo.pk %}">
 			<button class="btn btn-danger">
 				<i class="material-icons md-14">delete_forever</i> 
 				Delete post
 			</button>
 		</a>
+		
+		<br>
 	{% endif %}
+	
+	{% if photo.get_similar %}
+	
+	<h4>Similar images</h4>
+	</br>
+	<div class="row">
+	
+	{% for photo in photo.get_similar %}
+	<div class="col-md-3">
+	<div class="jumbotron photo-holder" style="position:relative;">
+	
+	    <div class="col-md-10 lens-col">
+    	  <img src="{{photo.path.url}}" style="width:120%;" />
+		</div>
+		
+		<div class="row" style="padding:0 4px;">
+		 <div class="col-md-4 lens-col">
+		  <p class="text-primary likes-number">
+                <strong>
+                    <span id="likes-count-{{photo.pk}}">
+                        {{ photo.likes.count }}
+                    </span>
+                    Likes
+                </strong>
+            </p>
+		</div>
+		<div class="col-md-4 lens-col">
+		<a href="{% url 'photo_detail' pk=photo.pk %}">
+                <button class="btn btn-md btn-info photo-btn-right lens-button"
+                        type="submit">
+                    <i class="material-icons md-14">search</i> Full
+                </button>
+        </a>
+		</div>
+		</div>
+		
+	</div>
+	</div>
+    {% endfor %}
+	
+	
+	{% endif %}
+
 </div>
 {% endblock %}
 

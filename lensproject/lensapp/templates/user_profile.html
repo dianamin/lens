@@ -33,10 +33,6 @@
 		width: 100%;
 	}
 
-	.lens-thumbnail {
-		
-	}
-
 {% endblock %}
 
 {% block body %}
@@ -44,16 +40,14 @@
 <div class="container">
 	<div class="profile-top-container">
 		
-		<p class="full-name"> {{ user.first_name }} {{ user.last_name }} <span class="username">({{ user.username }})</span> </p>
+		<p class="full-name"> {{ user.first_name }} {{ user.last_name }} 
+		    <span class="username">({{ user.username }})</span>
+		</p>
 		<div class="cover-image">
 			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>
 		</div>
 
 	</div>
-
-	<!-- <p> {{ user.profile.birthdate }} </p>
-	<p> {{ user.profile.description }} </p> -->
-
 	<div>
 		{% if request.user.is_authenticated and request.user != user%}
 		    {% if request.user.profile in user.followers.all %}
@@ -70,7 +64,6 @@
 		{% endif %}
 	</div>
 
-
 	{% if request.user.is_authenticated and request.user.username == user.username %}
 		<a href="{% url 'edit_user_profile' %}">
 			<button class="btn btn-primary lens-button">
@@ -79,9 +72,8 @@
 		</a>
 	{% endif %}
 
-
-	<h2> {{ user.followers.count }} Followers </h2>
-	<h2> {{ user.uploaded_photos.count }} Photos </h2>
+	 <h2> {{ user.followers.count }} Followers </h2>
+	 <h2> {{ user.uploaded_photos.count }} Photos </h2>
 
 
 	{% for photo in user.uploaded_photos.all %}
