@@ -17,4 +17,4 @@ def get_sim_image_ids(image_path):
     index, distances = settings.INDEX.get_nns_by_vector(feature_map,
             6, search_k=-1, include_distances=True)
 
-    return [i for i, d in zip(index, distances) if d < settings.TRESH]
+    return [i for i, d in list(zip(index, distances))[1:] if d < settings.TRESH]
