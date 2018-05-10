@@ -205,12 +205,15 @@ class LikePhotoAjax(LoginRequiredMixin, TemplateView):
         photo = Photo.objects.get(pk=kwargs['photo_pk'])
         if photo.user == self.request.user:
             return JsonResponse({'error': 'Don\'t like your own photo.'})
+        response = {}
         if not (self.request.user in photo.likes.all()):
             photo.likes.add(self.request.user)
+            response['liked'] = True
         else:
-            photo.likes.remove(self.request.user)           
+            photo.likes.remove(self.request.user)   
+            response['liked'] = False        
         photo.save()
-        return JsonResponse({})
+        return JsonResponse(response)
 
 
 class FindUserAjax(TemplateView):
