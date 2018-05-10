@@ -1,7 +1,9 @@
 {
     "name": "Main Test Suite",
     "js_files": [
-      "js/test.js"
+      "js/test.js",
+	  "js/find_users.js"
+	  
     ],
     "media_files": [
     ]

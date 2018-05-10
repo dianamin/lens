@@ -12,13 +12,18 @@ let fetchUsers = function() {
             users = JSON.parse(this.response).users;
 
             showUsers(users);
-            
         }
     };
+	
     xhttp.open('GET',
     		   '/ajax/find_user/' + prefix,
     			true);
     xhttp.send();
+}
+
+function getLength(users){
+	
+	return users.length;
 }
 
 let showUsers =  function(users) {
@@ -26,14 +31,16 @@ let showUsers =  function(users) {
     let userContainer = document.querySelector('#user-suggestions');
 
     userContainer.innerHTML = '';
+	
+	length_user = getLength(users);
 
-    for(let i = 0; i < users.length; i++) {
+    for(let i = 0; i < length_user; i++) {
         userContainer.insertAdjacentHTML('beforeend', '<li class="list-group-item"' + 
             'onclick=openUserPage(' + '"' + users[i].username + '"' + ')>' + 
             users[i].first_name + ' ' + users[i].last_name + 
             '</li>');
     }
-    
+	
 }
 
 let openUserPage = function(username) {
