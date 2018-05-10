@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 from lensapp.helpers import RandomFileName
+from lensapp.ml.utils import get_sim_image_ids
 
 
 class UserProfile(models.Model):
@@ -35,4 +36,6 @@ class Photo(models.Model):
     def __str__(self):
         return self.path.url
 
-
+    def get_similar(self):
+        sim_ids = get_sim_image_ids(self.path.url)
+        return Photo.objects.filer(pk__in=sim_id)

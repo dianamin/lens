@@ -148,6 +148,8 @@ MODEL_PATH = BASE_DIR + '/lensapp/ml/model/resnet.md5'
 INDEX_VECTORS_SIZE = 1024
 INDEX_PATH = BASE_DIR + '/lensapp/ml/model/index.pickle'
 
+TRESH = 0.6
+
 print(sys.argv)
 if sys.argv[1] in ['runserver', 'populate_db']:
     import keras.models
@@ -159,11 +161,11 @@ if sys.argv[1] in ['runserver', 'populate_db']:
         return K.function([model.layers[0].input],
             [model.layers[3].output])
 
-
     EXTRACT_IMAGE_FEATURES = load_model(MODEL_PATH)
 
 if sys.argv[1] == 'runserver':
     from annoy import AnnoyIndex
     print("Loading Index")
 
-    INDEX = AnnoyIndex(INDEX_VECTORS_SIZE).load(INDEX_PATH)
+    INDEX = AnnoyIndex(INDEX_VECTORS_SIZE)
+    INDEX.load(INDEX_PATH)

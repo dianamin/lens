@@ -193,4 +193,3 @@ class FindUserAjax(TemplateView):
                 username__startswith=kwargs['prefix'])[0:10]
         ]
         return JsonResponse({'users': users})
-
