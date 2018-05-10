@@ -94,7 +94,11 @@ class Discover(ListView):
                 [:max_photos_count])
 
         # hacked
-        similar_photos = [p for p in similar_photos] + [p for p in new_photos]
+        if similar_photos:
+            similar_photos = [p for p in similar_photos] \
+                + [p for p in new_photos]
+        else:
+            similar_photos = [p for p in new_photos]
 
         # filter photos
         similar_photos = [p for p in similar_photos \
