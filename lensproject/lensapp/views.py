@@ -208,7 +208,7 @@ class LikePhotoAjax(LoginRequiredMixin, TemplateView):
         if not (self.request.user in photo.likes.all()):
             photo.likes.add(self.request.user)
         else:
-            photo.likes.remove(self.request.user)
+            photo.likes.remove(self.request.user)           
         photo.save()
         return JsonResponse({})
 
