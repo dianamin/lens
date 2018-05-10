@@ -8,6 +8,8 @@ from PIL import Image
 
 def get_sim_image_ids(image_path):
     img = Image.open(settings.BASE_DIR + image_path)
+    if img.size != settings.REQ_IMG_SIZE:
+        img = img.resize(settings.REQ_IMG_SIZE)
     img_arr = np.expand_dims(np.array(img), axis=0)
     img.close()
     

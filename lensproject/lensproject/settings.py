@@ -152,7 +152,8 @@ TRESH = 0.6
 
 POPULATE_DB_LIMIT = 200
 
-print(sys.argv)
+REQ_IMG_SIZE = (256, 256)
+
 if sys.argv[1] in ['runserver', 'populate_db']:
     import keras.models
     import keras.backend as K
