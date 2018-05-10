@@ -7,7 +7,6 @@ import numpy as np
 from PIL import Image
 
 def get_sim_image_ids(image_path):
-    print(settings.BASE_DIR + image_path)
     img = Image.open(settings.BASE_DIR + image_path)
     img_arr = np.expand_dims(np.array(img), axis=0)
     img.close()

@@ -53,6 +53,40 @@ class Feed(LoginRequiredMixin, ListView):
         return (Photo.objects.all().filter(user__in=following_users)
                                    .order_by('-upload_date'))
 
+    def get_context_data(self,**kwargs):
+        context = super(Feed, self).get_context_data(**kwargs)
+        context['title'] = 'Feed'
+        return context
+
+
+class Discover(ListView):
+    template_name = 'feed.html'
+    model = Photo
+    context_object_name = 'photos'
+    login_url = '/login/'
+
+    def get_queryset(self, *args, **kwargs):
+        user_photos = []
+        max_photos_count = 50
+        if not self.request.user.is_authenticated:
+            user_photos = self.request.user.uploaded_photos.all()[:5]
+
+        similar_photos = []
+        for photo in user_photos:
+            similar_photos = similar_photos + photo.get_sim()
+
+        similar_photos += (Photo.objects.all()
+                        .order_by('-upload_date')[:max_photos_count])
+
+        similar_photos.sort(key=lambda photo: photo.upload_date)
+
+        return similar_photos[:max_photos_count]
+
+    def get_context_data(self,**kwargs):
+        context = super(Discover, self).get_context_data(**kwargs)
+        context['title'] = 'Discover'
+        return context
+
 
 class UserProfile(DetailView):
     model = User
