@@ -33,6 +33,10 @@
 		width: 100%;
 	}
 
+	#not-activated {
+		color: white;
+		font-size: 10px;
+	}
 {% endblock %}
 
 {% block body %}
@@ -41,7 +45,15 @@
 	<div class="profile-top-container">
 		
 		<p class="full-name"> {{ user.first_name }} {{ user.last_name }} 
-		    <span class="username">({{ user.username }})</span>
+		    <span class="username">
+		    	({{ user.username }})
+		    </span>
+
+		    {% if not user.profile.activated %}
+			    <span id="not-activated">
+			    	Not activated
+			    </span>
+			{% endif %}
 		</p>
 		<div class="cover-image">
 			<img src="{% static 'images/lens_default_cover2.jpg' %}"/>

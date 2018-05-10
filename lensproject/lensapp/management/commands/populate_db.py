@@ -35,7 +35,7 @@ class Command(BaseCommand):
 
         print('Reading images')
         images = np.zeros((len(file_paths),
-                IMAGES_SIZE[0], IMAGES_SIZE[1], 3))
+                settings.REQ_IMG_SIZE[0], settings.REQ_IMG_SIZE[1], 3))
 
         for i, fp in enumerate(file_paths):
             img = Image.open(fp)
@@ -74,21 +74,24 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         NUM_USERS = 15
 
-        print('Creat or reset users')
+        print('Create or reset users')
         users = []
         for i in range(NUM_USERS):
             user_data = self.get_user_data(i)
             if not User.objects.filter(username=user_data['username'])\
                     .exists():
                 user = User.objects.create_user(**user_data)
+                user.profile.activated = True
             else:
                 user = User.objects.get(username=user_data['username'])
+                user.profile.activated = True
 
             if user.uploaded_photos.all().count() != 0:
                 user.uploaded_photos.all().delete()
 
             user.set_password('testuser')
             user.save()
+            user.profile.save()
             users.append(user)
 
         print('Uploading images')

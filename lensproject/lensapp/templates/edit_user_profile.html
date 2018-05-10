@@ -36,7 +36,10 @@
 {% block body %}
 <div class="text-center">
     <form method="post" class="form-signin centered">
-        <h3 class="h3 mb-3 font-weight-normal"><i class="material-icons md-20">edit</i> Edit User Profile </h3>
+        <h3 class="h3 mb-3 font-weight-normal">
+          <i class="material-icons md-20">edit</i>
+            Edit User Profile
+          </h3>
         {% csrf_token %}
         {{ form.as_p }}
         <button class="btn btn-lg btn-block btn-space" type="submit">
