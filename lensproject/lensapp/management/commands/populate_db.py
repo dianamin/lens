@@ -28,7 +28,6 @@ class Command(BaseCommand):
 
     def create_index_file(self):
         NUM_TREES = 100
-        IMAGES_SIZE = (256, 256)
         BATCH_SIZE = 64
 
         file_paths, image_ids = list(zip(
@@ -40,8 +39,8 @@ class Command(BaseCommand):
 
         for i, fp in enumerate(file_paths):
             img = Image.open(fp)
-            if img.size != IMAGES_SIZE:
-                img = img.resize(IMAGES_SIZE)
+            if img.size != settings.REQ_IMG_SIZE:
+                img = img.resize(settings.REQ_IMG_SIZE)
             images[i] = np.array(img)
             img.close()
 
