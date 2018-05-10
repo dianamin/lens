@@ -6,4 +6,6 @@ python:
 install: "pip3 install -r requirements.txt"
 
 # command to run tests
-script: python3 lensproject/manage.py test
+script:
+  - cd lensproject
+  - python3 manage.py test
