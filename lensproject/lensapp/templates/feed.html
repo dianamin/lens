@@ -1,38 +1,5 @@
 {% extends 'layout.html' %}
 
-{% block styles %}
-
-  .lens-col {
-    padding: 6px 4px !important;
-  }
-
-  .photo-holder {
-    padding: 12px 12px 5px 12px !important;
-    margin: 0;
-  }
-
-  .photo-btn-left {
-    width:100%;
-  }
-
-  .photo-btn-right {
-    width:100%;
-  }
-
-  .lens-col br {
-    display: none;
-  }
-
-  .likes-number {
-    display: block;
-    position: relative;
-    top: 8px;
-    text-align: center;
-}
-  
-
-{% endblock %}
-
 {% block body %}
 <div class="container">
 	<h1> {{ title }} </h1>
@@ -41,48 +8,14 @@
     <p> No photos. Please follow people :) </p>
     {% endif %}
 
-    <div class="row">
-    {% for photo in photos %}
+    {% block list %}
+      {% include 'photo_list.html' %}
+    {% endblock %}
 
-            <div class="col-md-4 lens-col">
-                {% include "photo.html" %}
-            </div>
-    
-    {% endfor %}
-    </div>
 </div>
 {% endblock %}
 
-
 {% block scripts %}
-<script>
-    let like = function(photo_pk) {
-        let likesCount = document.querySelector('#likes-count-' + photo_pk);
-        let likeButton = document.querySelector('#like-button-' + photo_pk);
-        let likeText = likeButton.querySelector('#button-content-like');
-        let unlikeText = likeButton.querySelector('#button-content-unlike');
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              let currentLikes = parseInt(likesCount.innerText);
-              let response = JSON.parse(this.response)
-              if (response.liked) {
-                likesCount.innerText = currentLikes + 1;
-                likeText.style.display = 'none';
-                unlikeText.style.display = 'block';
-              }
-              else {
-                likesCount.innerText = currentLikes - 1;
-                likeText.style.display = 'block';
-                unlikeText.style.display = 'none';
-              }
-            }
-        };
-        
-        xhttp.open('GET', 
-                    '/ajax/like_photo/' + photo_pk, 
-                    true);
-        xhttp.send();
-    }
-</script>
+  {% block listScripts %}
+  {% endblock %}
 {% endblock %}

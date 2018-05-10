@@ -86,27 +86,14 @@
 
 	 <h2> {{ user.followers.count }} Followers </h2>
 	 <h2> {{ user.uploaded_photos.count }} Photos </h2>
+	<div>
 
+	    {% block list %}
+	      {% include 'photo_list.html' with photos=user.uploaded_photos.all user=request.user %}
+	    {% endblock %}
 
-	{% for photo in user.uploaded_photos.all %}
-		<div style="display: inline-block;">
-			<img class="img-thumbnail lens-thumbnail"
-				 style="height: 150px;"
-				 src="{{ photo.path.url }}" />
-			<p style="text-align: center;">
-				<i class="material-icons md-14">favorite</i> 
-				{{ photo.likes.count }}
-			</p>
-			<p style="text-align: center;">
-				<a href="{% url 'photo_detail' pk=photo.pk %}">
-					<i class="material-icons md-14">visibility</i> View
-				</a>
-			</p>
-	    </div>
-	{% endfor %}
-</div>
+	</div>
 {% endblock %}
-
 
 {% block scripts %}
 <script>
@@ -123,4 +110,7 @@
 	    xhttp.send();
 	}
 </script>
+
+  {% block listScripts %}
+  {% endblock %}
 {% endblock %}
