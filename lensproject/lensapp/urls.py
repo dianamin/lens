@@ -38,6 +38,7 @@ urlpatterns = [
         views.LikePhotoAjax.as_view(),
 		name='like_photo'),
     url(r'^feed/$', views.Feed.as_view(), name='feed'),
+    url(r'^feed-fancy/$', views.Discover.as_view(), name='discover'),
     url(r'^photo/(?P<pk>[0-9]+)/$', 
         views.PhotoDetail.as_view(),
         name='photo_detail'),
@@ -75,4 +76,5 @@ urlpatterns = [
             'template_name': 'password_reset_complete.html',
         },
         name='password_reset_complete'),
+
 ]
