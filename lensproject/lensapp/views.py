@@ -16,6 +16,8 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 
+from random import shuffle
+
 class Home(TemplateView):
     template_name = 'index.html'
 
@@ -49,9 +51,10 @@ class Feed(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self, *args, **kwargs):
+        max_photos_count = 99
         following_users = self.request.user.profile.following.all()
         return (Photo.objects.all().filter(user__in=following_users)
-                                   .order_by('-upload_date'))
+                                   .order_by('-upload_date'))[:max_photos_count]
 
     def get_context_data(self,**kwargs):
         context = super(Feed, self).get_context_data(**kwargs)
@@ -66,21 +69,40 @@ class Discover(ListView):
     login_url = '/login/'
 
     def get_queryset(self, *args, **kwargs):
+        def merge_query_sets(s1, s2):
+            if s1 == None and s2 == None:
+                raise Exception("Both query sets are None")
+            if s1 == None:
+                return s2
+            if s2 == None:
+                return s1
+            return s1 | s2
+
         user_photos = []
-        max_photos_count = 50
-        if not self.request.user.is_authenticated:
+        max_photos_count = 48
+        if self.request.user.is_authenticated:
             user_photos = self.request.user.uploaded_photos.all()[:5]
 
-        similar_photos = []
+        # get similar photos
+        similar_photos = None
         for photo in user_photos:
-            similar_photos = similar_photos + photo.get_sim()
+            similar_photos = merge_query_sets(similar_photos,
+                    photo.get_similar())
 
-        similar_photos += (Photo.objects.all()
-                        .order_by('-upload_date')[:max_photos_count])
+        # get new photos
+        new_photos = (Photo.objects.all().order_by('-upload_date').all() \
+                [:max_photos_count])
 
-        similar_photos.sort(key=lambda photo: photo.upload_date)
+        # hacked
+        similar_photos = [p for p in similar_photos] + [p for p in new_photos]
 
-        return similar_photos[:max_photos_count]
+        # filter photos
+        similar_photos = [p for p in similar_photos \
+                if p.user != self.request.user][:max_photos_count]
+
+        shuffle(similar_photos)
+
+        return similar_photos
 
     def get_context_data(self,**kwargs):
         context = super(Discover, self).get_context_data(**kwargs)
@@ -227,6 +249,6 @@ class FindUserAjax(TemplateView):
                 'last_name': user.last_name
             }
             for user in User.objects.filter(
-                username__startswith=kwargs['prefix'])[0:10]
+                username__startswith=kwargs['prefix'])[0:5]
         ]
         return JsonResponse({'users': users})
