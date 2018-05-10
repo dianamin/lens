@@ -93,9 +93,11 @@ class Command(BaseCommand):
             users.append(user)
 
         print('Uploading images')
+
         paths = self._read_images()
         if settings.POPULATE_DB_LIMIT > 0:
             paths = paths[:settings.POPULATE_DB_LIMIT]
+
         np.random.shuffle(paths)
 
         for i, path in enumerate(paths):

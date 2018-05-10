@@ -1,14 +1,66 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+
+  form {
+    width: 330px;
+    margin: auto;
+  }
+
+  p {
+    margin: 0 !important;
+  }
+
+  .btn-space {
+    margin-top: 20px;
+  }
+
+  body {
+    background-color: #f5f5f5;
+  }
+
+  .logo {
+    color: #007bff;
+  }
+  
+  .centered {
+    position: fixed;
+    top: calc(50% - 30px);
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+{% endblock %}
+
+
 {% block body %}
-<div class="container">
-<h1><i class="material-icons md-20">edit</i>  Edit User Profile </h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">
-        <i class="material-icons md-14">save</i> Save
-    </button>
-</form>
+<div class="text-center">
+    <form method="post" class="form-signin centered">
+        <h3 class="h3 mb-3 font-weight-normal"><i class="material-icons md-20">edit</i> Edit User Profile </h3>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-lg btn-block btn-space" type="submit">
+            <i class="material-icons md-14">save</i> Save
+        </button>
+    </form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  
+    var labels = document.querySelectorAll('label');
+    for (var i = 0; i < labels.length; i++) {
+      labels[i].classList.add('sr-only');
+    }
+
+    var inputs = document.querySelectorAll('input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].classList.add('form-control');
+    }
+
+    inputs[2].placeholder = "Birthdate";
+    inputs[3].placeholder = "Description";
+
+</script>
 {% endblock %}
