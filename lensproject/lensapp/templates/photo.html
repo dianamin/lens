@@ -5,7 +5,9 @@
         	{{ photo.user.username }}
         </a>
     </p>
-    <img src="{{photo.path.url}}" style="width: 80%;"/>
+    <img src="{{photo.path.url}}" style="width: 80%;" />
     <br />
-
+    {% for photo in photo.get_similar %}
+    	<img src="{{photo.path.url}}" style="height: 100px;" />
+    {% endfor %}
 </div>

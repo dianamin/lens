@@ -38,4 +38,4 @@ class Photo(models.Model):
 
     def get_similar(self):
         sim_ids = get_sim_image_ids(self.path.url)
-        return Photo.objects.filer(pk__in=sim_id)
+        return Photo.objects.filter(pk__in=sim_ids)

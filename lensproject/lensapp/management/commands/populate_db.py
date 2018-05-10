@@ -43,6 +43,7 @@ class Command(BaseCommand):
             if img.size != IMAGES_SIZE:
                 img = img.resize(IMAGES_SIZE)
             images[i] = np.array(img)
+            img.close()
 
         images = np.split(images,
                 np.arange(BATCH_SIZE, images.shape[0], BATCH_SIZE))
@@ -92,7 +93,7 @@ class Command(BaseCommand):
             users.append(user)
 
         print('Uploading images')
-        paths = self._read_images()
+        paths = self._read_images()[:200]
         np.random.shuffle(paths)
         for i, path in enumerate(paths):
             photo = Photo(path=self._get_file(path), user=users[i%NUM_USERS])
