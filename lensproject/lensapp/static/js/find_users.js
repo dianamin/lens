@@ -26,6 +26,18 @@ function getLength(users){
 	return users.length;
 }
 
+function getUsername(user){
+	return user.username;
+}
+
+function getFirstName(user){
+	return user.first_name;
+}
+
+function getLastName(user){
+	return user.last_name;
+}
+
 let showUsers =  function(users) {
 
     let userContainer = document.querySelector('#user-suggestions');
@@ -36,8 +48,8 @@ let showUsers =  function(users) {
 
     for(let i = 0; i < length_user; i++) {
         userContainer.insertAdjacentHTML('beforeend', '<li class="list-group-item"' + 
-            'onclick=openUserPage(' + '"' + users[i].username + '"' + ')>' + 
-            users[i].first_name + ' ' + users[i].last_name + 
+            'onclick=openUserPage(' + '"' + getUsername(users[i])+ '"' + ')>' + 
+            getFirstName(users[i]) + ' ' + getLastName(users[i]) + 
             '</li>');
     }
 	
