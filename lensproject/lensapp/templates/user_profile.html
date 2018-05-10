@@ -27,10 +27,16 @@
 	}
 
 	.cover-image > img {
+		margin-top: 25px;
 		object-fit:cover;
 		height: 200px;
 		width: 100%;
 	}
+
+	.lens-thumbnail {
+		
+	}
+
 {% endblock %}
 
 {% block body %}
@@ -67,7 +73,7 @@
 
 	{% if request.user.is_authenticated and request.user.username == user.username %}
 		<a href="{% url 'edit_user_profile' %}">
-			<button class="btn btn-primary">
+			<button class="btn btn-primary lens-button">
 				Edit profile
 			</button>
 		</a>
@@ -80,7 +86,7 @@
 
 	{% for photo in user.uploaded_photos.all %}
 		<div style="display: inline-block;">
-			<img class="img-thumbnail"
+			<img class="img-thumbnail lens-thumbnail"
 				 style="height: 150px;"
 				 src="{{ photo.path.url }}" />
 			<p style="text-align: center;">

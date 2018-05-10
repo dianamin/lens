@@ -28,7 +28,7 @@
             background-color: #ececec !important;
         }
 		.logo {
-			margin-bottom: 30px;
+			margin-bottom: 0px;
 			color: #007bff;
 		}
 		.body-seize {
@@ -40,6 +40,21 @@
         #title:hover {
             text-decoration: none !important;
         }
+
+        .lens-button {
+            cursor: pointer;
+        }
+
+        #user-suggestions {
+            position: absolute;
+            z-index: 10;
+            width: 243px;
+        }
+
+        #user-suggestions > li {
+            padding: 5px 10px;
+        }
+
         {% block styles %}{% endblock %}
     </style>
 
@@ -102,6 +117,10 @@
                            class="form-control" 
                            onchange="fetchUsers()"
                            placeholder="Stalk" />
+
+                    <ul class="list-group" id="user-suggestions">
+                    </ul>
+                    
                 </div>
             </div>
         </div>
