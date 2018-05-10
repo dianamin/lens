@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_jasmine',
     'lensapp',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'lensproject.urls'
@@ -172,3 +174,5 @@ if sys.argv[1] == 'runserver':
 
     INDEX = AnnoyIndex(INDEX_VECTORS_SIZE)
     INDEX.load(INDEX_PATH)
+
+SILKY_PYTHON_PROFILER = True
