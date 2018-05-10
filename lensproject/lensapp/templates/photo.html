@@ -1,10 +1,36 @@
-<div class="jumbotron">
-    <p> 
-    	Uploaded by
+<div class="jumbotron photo-holder" style="position:relative;">
+    <p class="photo-title"> 
+    	<span style="color:lightslategray">Uploaded by</span>
     	<a href="{% url 'user_profile' username=photo.user.username %}">
         	{{ photo.user.username }}
         </a>
     </p>
-    <img src="{{photo.path.url}}" style="width: 80%;" />
+
+    <img src="{{photo.path.url}}" style="width: 100%;" />
+    
+    <div class="row" style="padding:0 12px;">
+            
+        <div class="col-md-4 lens-col">
+            
+                <p class="text-primary likes-number"><strong>{{ photo.likes|length }} Likes</strong></p>
+                
+        </div>
+
+        <div class="col-md-4 lens-col">
+                <button class="btn btn-md btn-primary photo-btn-left lens-button" type="submit">
+                        <i class="material-icons md-14">favorite</i> Like
+                    </button>
+        </div>
+
+        <div class="col-md-4 lens-col">
+            <button class="btn btn-md btn-info photo-btn-right lens-button" type="submit">
+                <i class="material-icons md-14">search</i> Full
+            </button>
+        </div>
+            
+    </div>
+
+    
+
     <br />
 </div>

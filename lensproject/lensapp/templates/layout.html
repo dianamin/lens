@@ -26,6 +26,7 @@
         }
         .navbar-custom-bg {
             background-color: #ececec !important;
+            z-index: 100;
         }
 		.logo {
 			margin-bottom: 0px;
@@ -53,6 +54,13 @@
 
         #user-suggestions > li {
             padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #user-suggestions > li:hover {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #ededed;
         }
 
         {% block styles %}{% endblock %}

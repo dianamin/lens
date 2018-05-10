@@ -1,15 +1,59 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+
+  .lens-col {
+    padding: 6px 4px !important;
+  }
+
+  .photo-title {
+    
+  }
+
+  .photo-holder {
+    padding: 12px 12px 5px 12px !important;
+    margin: 0;
+  }
+
+  .photo-btn-left {
+    width:100%;
+  }
+
+  .photo-btn-right {
+    width:100%;
+  }
+
+  .lens-col br {
+    display: none;
+  }
+
+  .likes-number {
+    display: block;
+    position: relative;
+    top: 8px;
+    text-align: center;
+}
+  
+}
+
+{% endblock %}
+
 {% block body %}
 <div class="container">
 	<h1> {{ title }} </h1>
 
     {% if photos.count == 0 %}
-    <p> no photos pls follow people </p>
+    <p> No photos. Please follow people :) </p>
     {% endif %}
 
-	{% for photo in photos %}       
-		{% include "photo.html" %}
-    {% endfor %}
+    <div class="row">
+    {% for photo in photos %}
+
+            <div class="col-md-4 lens-col">
+                {% include "photo.html" %}
+            </div>
+    
+            {% endfor %}
+    </div>
 </div>
 {% endblock %}

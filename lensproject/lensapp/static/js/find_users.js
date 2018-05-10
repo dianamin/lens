@@ -30,7 +30,7 @@ let showUsers =  function(users) {
     for(let i = 0; i < users.length; i++) {
         userContainer.insertAdjacentHTML('beforeend', '<li class="list-group-item"' + 
             'onclick=openUserPage(' + '"' + users[i].username + '"' + ')>' + 
-            users[i].first_name + ' ' + users[i].first_name + 
+            users[i].first_name + ' ' + users[i].last_name + 
             '</li>');
     }
     
