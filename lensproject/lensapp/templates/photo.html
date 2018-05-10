@@ -52,9 +52,6 @@
             {% endif %}    
         </div>
 
-		{% url 'discover' as discover_url %}
-		
-        {% if request.path == discover_url %}
         <div class="col-md-4 lens-col">
             <a href="{% url 'photo_detail' pk=photo.pk %}">
                 <button class="btn btn-md btn-info photo-btn-right lens-button"
@@ -63,7 +60,6 @@
                 </button>
             </a>
         </div>
-		{% endif %}
 		
     </div>
     <br />
