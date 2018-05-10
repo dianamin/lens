@@ -150,6 +150,8 @@ INDEX_PATH = BASE_DIR + '/lensapp/ml/model/index.pickle'
 
 TRESH = 0.6
 
+POPULATE_DB_LIMIT = 200
+
 print(sys.argv)
 if sys.argv[1] in ['runserver', 'populate_db']:
     import keras.models
